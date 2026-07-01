@@ -1,0 +1,26 @@
+"""
+prompts/__init__.py
+MASTER PROMPT ENGINE — bütün modullar.
+"""
+from prompts.MASTER_PROMPT import (
+    SYSTEM, THINKING, RESEARCH, VALIDATION, PLANNING,
+    NOTE_WRITING, ELITE_SOURCES, OUTPUT_SCHEMA, COMPILED,
+    build,
+    IDENTITY, HARD_RULES, IDEAL_TRAITS, MULTI_BRANCH_FRAMEWORK,
+    VERIFICATION_PROTOCOL, ERROR_HANDLING, ETHICS, LONG_TERM_STRATEGY,
+    RESEARCH_METHODOLOGY, NOTE_FORMAT, OPERATIONAL_RULES,
+    __version__,
+)
+from prompts import optimizer, store, directive, control, evolution
+
+__all__ = [
+    # MASTER_PROMPT
+    "SYSTEM", "THINKING", "RESEARCH", "VALIDATION", "PLANNING",
+    "NOTE_WRITING", "ELITE_SOURCES", "OUTPUT_SCHEMA", "COMPILED",
+    "build", "IDENTITY", "HARD_RULES", "IDEAL_TRAITS",
+    "MULTI_BRANCH_FRAMEWORK", "VERIFICATION_PROTOCOL", "ERROR_HANDLING",
+    "ETHICS", "LONG_TERM_STRATEGY", "RESEARCH_METHODOLOGY", "NOTE_FORMAT",
+    "OPERATIONAL_RULES", "__version__",
+    # Sub-modullar
+    "optimizer", "store", "directive", "control", "evolution",
+]

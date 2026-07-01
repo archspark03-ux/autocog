@@ -1,0 +1,87 @@
+# Təhlükəsizlik: gizli məlumatları, beyin məlumatlarını, nəticələri gizlət
+# Heç bir halda GitHub-a commit etmə!
+
+# API keys & secrets
+.env
+.env.local
+.env.*.local
+render_service.json
+deploy_keys.json
+
+# Database
+memory/brain.db
+memory/brain.db-shm
+memory/brain.db-wal
+memory/backups/
+memory/.dashboard_token
+*.db
+*.db-shm
+*.db-wal
+
+# Brain database (şəxsi düşüncələr, tapşırıqlar, qeydlər)
+memory/brain.db
+memory/.last_tick
+memory/.dashboard_token
+memory/backups/
+*.db
+*.db-journal
+
+# Log faylları
+logs/*.log
+logs/*.log.gz
+
+# Qeydlər (markdown)
+notes/*.md
+
+# Nəticələr
+logs/stress_test_*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini

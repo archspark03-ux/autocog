@@ -1,0 +1,47 @@
+# Render.com üçün avtomatik konfiqurasiya
+# Bu fayl repo-nun kökündə olmalıdır
+
+services:
+  - type: web
+    name: avtonom-cogitate
+    runtime: python
+    plan: free  # PULSUZ tier (750 saat/ay)
+    region: frankfurt  # Avropa, Azərbaycana yaxın
+    branch: main
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: python start_all.py
+    healthCheckPath: /ping
+    envVars:
+      - key: PYTHONIOENCODING
+        value: utf-8
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PRIMARY_BRAIN
+        value: groq
+      - key: SECONDARY_BRAIN
+        value: pollinations
+      - key: TERTIARY_BRAIN
+        value: cerebras
+      - key: FALLBACK_BRAIN
+        value: pollinations
+      - key: LOOP_INTERVAL_SECONDS
+        value: "300"
+      - key: DEEP_RESEARCH_EVERY_LOOP
+        value: "false"
+      - key: GROQ_API_KEY
+        sync: false  # Render dashboard-dan əl ilə daxil et
+      - key: CEREBRAS_API_KEY
+        sync: false
+      - key: POLLINATIONS_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false  # Neon PostgreSQL connection string
+      - key: DASHBOARD_TOKEN
+        generateValue: true  # Render avtomatik yaratsın
+      - key: USER_GOAL
+        value: "Azərbaycan və dünya miqyasında ən vacib, lakin az tanınan problemləri və fürsətləri araşdır. Hər dövrədə bir dərin mövzu seç, onu 5-10 illik zaman perspektivində analiz et, sübuta əsaslanan orijinal fikirlər irəli sür. Heç bir populist, hype, clickbait yanaşma istifadə etmə. Hər iddianı ən azı 2 mənbə ilə yoxla. 'BİLMİRƏM' deməkdən çəkinmə. Konkret rəqəmlər, tarixlər, adlar ver. Sıfır halusinasiya. Mən olmayanda da düşün, araşdır, qeydlər yaz, tapşırıqlar yarat."
+    autoDeploy: true

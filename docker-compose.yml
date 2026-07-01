@@ -1,0 +1,34 @@
+# AvtonomCogitate — docker-compose
+# Lokal test üçün və ya VPS-də işlətmək üçün
+
+version: "3.8"
+
+services:
+  brain:
+    build: .
+    container_name: avtonom-cogitate
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - brain-data:/app/memory
+      - brain-notes:/app/notes
+      - brain-logs:/app/logs
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  brain-data:
+  brain-notes:
+  brain-logs:

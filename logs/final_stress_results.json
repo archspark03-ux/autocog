@@ -1,0 +1,121 @@
+{
+  "pass": 19,
+  "fail": 0,
+  "skipped": 0,
+  "details": [
+    {
+      "name": "fallback chain built",
+      "ok": true,
+      "detail": "3 beyin",
+      "ts": "2026-07-01T12:29:12"
+    },
+    {
+      "name": "  sorğu #1",
+      "ok": true,
+      "detail": "groq · 946ms · 1 char",
+      "ts": "2026-07-01T12:29:13"
+    },
+    {
+      "name": "  sorğu #2",
+      "ok": true,
+      "detail": "groq · 898ms · 403 char",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "  sorğu #3",
+      "ok": true,
+      "detail": "groq · 447ms · 170 char",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "backup create",
+      "ok": true,
+      "detail": "brain_20260701-122914.db",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "backup cleanup",
+      "ok": true,
+      "detail": "0 köhnə silindi",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "backup list",
+      "ok": true,
+      "detail": "5 backup mövcud",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "health report",
+      "ok": true,
+      "detail": "uptime=0d 4san, stuck=True",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "mark_tick",
+      "ok": true,
+      "detail": "age=0.00s",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "disk/ram",
+      "ok": true,
+      "detail": "disk=53.9% ram=85.2%",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "db integrity",
+      "ok": true,
+      "detail": "thoughts=7, 0.08MB, ok=True",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "rotate_logs",
+      "ok": true,
+      "detail": "compressed=0, deleted=0",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "log size",
+      "ok": true,
+      "detail": "0.07 MB",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "token roundtrip",
+      "ok": true,
+      "detail": "len=43",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "sanitize xss",
+      "ok": true,
+      "detail": "len=446",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "rate limit blocks",
+      "ok": true,
+      "detail": "6-cı sorğu bloklandı",
+      "ts": "2026-07-01T12:29:14"
+    },
+    {
+      "name": "  paralel #0",
+      "ok": true,
+      "detail": "groq · 188 · 795ms total",
+      "ts": "2026-07-01T12:29:15"
+    },
+    {
+      "name": "  paralel #1",
+      "ok": true,
+      "detail": "groq · 162 · 795ms total",
+      "ts": "2026-07-01T12:29:15"
+    },
+    {
+      "name": "  paralel #2",
+      "ok": true,
+      "detail": "groq · 245 · 795ms total",
+      "ts": "2026-07-01T12:29:15"
+    }
+  ]
+}

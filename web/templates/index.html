@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AvtonomCogitate · 7/24 Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e0a;
+    color: #00ff88;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .header {
+    border: 1px solid #00ff88;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    background: rgba(0, 255, 136, 0.04);
+    border-radius: 4px;
+  }
+  .header h1 {
+    color: #00ffaa;
+    font-size: 22px;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .header .meta {
+    color: #00cc77;
+    font-size: 12px;
+  }
+  .header .goal {
+    color: #88ff99;
+    font-size: 13px;
+    margin-top: 8px;
+    font-style: italic;
+    border-left: 2px solid #00ff88;
+    padding-left: 10px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    border: 1px solid #00ff88;
+    padding: 12px 14px;
+    background: rgba(0, 255, 136, 0.03);
+    border-radius: 4px;
+  }
+  .stat .label {
+    color: #00aa66;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .stat .value {
+    color: #00ffaa;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 4px;
+  }
+  .panel {
+    border: 1px solid #00ff88;
+    margin-bottom: 16px;
+    background: rgba(0, 255, 136, 0.02);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .panel-header {
+    background: rgba(0, 255, 136, 0.08);
+    padding: 8px 14px;
+    color: #00ffaa;
+    font-weight: bold;
+    border-bottom: 1px solid #00ff88;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .panel-header .badge {
+    color: #00aa66;
+    font-size: 11px;
+    font-weight: normal;
+  }
+  .panel-body {
+    padding: 12px 14px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .item {
+    border-left: 2px solid #00ff88;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 4px 4px 0;
+  }
+  .item .ts {
+    color: #00aa66;
+    font-size: 11px;
+  }
+  .item .focus {
+    color: #00ffaa;
+    font-weight: bold;
+    margin: 4px 0;
+  }
+  .item .obs {
+    color: #88ff99;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .item .meta-line {
+    color: #00cc77;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .item .thinking {
+    color: #66ddaa;
+    font-size: 11px;
+    font-style: italic;
+    margin-top: 4px;
+    border-top: 1px dashed #004422;
+    padding-top: 4px;
+  }
+  .task {
+    border-left-color: #ffaa00;
+  }
+  .task .priority {
+    color: #ffcc44;
+    font-weight: bold;
+  }
+  .research {
+    border-left-color: #4488ff;
+  }
+  .note {
+    border-left-color: #ff44aa;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .note:hover {
+    background: rgba(255, 68, 170, 0.1);
+  }
+  .note .title {
+    color: #ff88cc;
+    font-weight: bold;
+  }
+  .pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .empty {
+    color: #006644;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+  }
+  .modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-bg.active { display: flex; }
+  .modal {
+    background: #0a0e0a;
+    border: 1px solid #00ff88;
+    padding: 20px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 4px;
+    width: 800px;
+  }
+  .modal pre {
+    white-space: pre-wrap;
+    color: #88ff99;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  .close-btn {
+    background: #00ff88;
+    color: #0a0e0a;
+    border: none;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 2px;
+  }
+  .close-btn:hover { background: #00ffaa; }
+  .status-line {
+    color: #00ffaa;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .indicator {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid #00ff88;
+    border-radius: 10px;
+    font-size: 10px;
+    margin-left: 8px;
+  }
+  .indicator.cycle {
+    border-color: #ffaa00;
+    color: #ffcc44;
+  }
+  .indicator.action {
+    border-color: #4488ff;
+    color: #88ccff;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>◆ AVTONOMCOGITATE · 7/24 DASHBOARD</h1>
+    <div class="meta">
+      <span class="pulse"></span>
+      Aktiv beyin: <strong id="brain-name">yüklənir...</strong>
+      · Loop: <strong>{{ loop_interval }}s</strong>
+      · Uptime: <strong id="uptime">—</strong>
+      · Son yeniləmə: <strong id="last-update">—</strong>
+    </div>
+    <div class="goal"><strong>Məqsəd:</strong> {{ user_goal }}</div>
+  </div>
+
+  <div class="grid">
+    <div class="stat">
+      <div class="label">Dövrələr</div>
+      <div class="value" id="stat-cycles">—</div>
+    </div>
+    <div class="stat">
+      <div class="label">Düşüncələr</div>
+      <div class="value" id="stat-thoughts">—</div>
+    </div>
+    <div class="stat">
+      <div class="label">Araşdırmalar</div>
+      <div class="value" id="stat-researches">—</div>
+    </div>
+    <div class="stat">
+      <div class="label">Açıq tapşırıqlar</div>
+      <div class="value" id="stat-open-tasks">—</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <span>♥ SAĞLAMLIQ</span>
+      <span class="badge" id="health-badge">yüklənir...</span>
+    </div>
+    <div class="panel-body" id="health-panel">
+      <div class="empty">yüklənir...</div>
+    </div>
+  </div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span>◆ SON DÜŞÜNCƏLƏR (chain-of-thought)</span>
+    <span class="badge" id="thoughts-badge">yüklənir...</span>
+  </div>
+  <div class="panel-body" id="thoughts-list">
+    <div class="empty">gözlənilir...</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span>▶ AÇIQ TAPŞIRIIQLAR</span>
+    <span class="badge" id="tasks-badge">yüklənir...</span>
+  </div>
+  <div class="panel-body" id="tasks-list">
+    <div class="empty">gözlənilir...</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span>⌕ SON ARAŞDIRMALAR</span>
+    <span class="badge" id="research-badge">yüklənir...</span>
+  </div>
+  <div class="panel-body" id="research-list">
+    <div class="empty">gözlənilir...</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-header">
+    <span>📝 QEYDLƏR (markdown)</span>
+    <span class="badge" id="notes-badge">yüklənir...</span>
+  </div>
+  <div class="panel-body" id="notes-list">
+    <div class="empty">gözlənilir...</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 id="modal-title">Qeyd</h2>
+      <button class="close-btn" onclick="closeModal()">BAĞLA</button>
+    </div>
+    <pre id="modal-content"></pre>
+  </div>
+</div>
+
+<script>
+const REFRESH_MS = 5000;
+
+// URL-dən token oxu, ya localStorage-dən götür
+function getToken() {
+  const url = new URL(window.location.href);
+  let t = url.searchParams.get('token');
+  if (t) {
+    localStorage.setItem('dashboard_token', t);
+  }
+  return t || localStorage.getItem('dashboard_token') || '{{ token }}';
+}
+const TOKEN = getToken();
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+async function api(path) {
+  const r = await fetch(path, { headers: { 'X-Dashboard-Token': TOKEN } });
+  if (r.status === 401) {
+    document.body.innerHTML = '<div style="padding:40px;text-align:center;color:#ff8888;"><h1>⚠ Token yanlışdır və ya yoxdur</h1><p>URL-ə ?token=... əlavə edin</p></div>';
+    throw new Error('auth failed');
+  }
+  if (!r.ok) throw new Error('API error: ' + r.status);
+  return r.json();
+}
+
+async function loadStats() {
+  try {
+    const s = await api('/api/stats');
+    document.getElementById('stat-cycles').textContent = s.cycles || 0;
+    document.getElementById('stat-thoughts').textContent = s.thoughts || 0;
+    document.getElementById('stat-researches').textContent = s.researches || 0;
+  } catch (e) { console.error('stats xətası', e); }
+}
+
+async function loadHealth() {
+  try {
+    const h = await api('/api/health');
+    document.getElementById('uptime').textContent = h.uptime_str || '—';
+    document.getElementById('health-badge').textContent = h.is_stuck ? '⚠ STUCK' : '✓ SAĞLAM';
+    const stuck = h.is_stuck;
+    const dbOk = h.database?.ok;
+    const panel = document.getElementById('health-panel');
+    panel.innerHTML = `
+      <div class="item">
+        <div class="ts">${h.ts}</div>
+        <div class="focus">
+          <span class="indicator ${stuck ? 'cycle' : ''}">${stuck ? '⚠ STUCK' : '✓ işləyir'}</span>
+          <span class="indicator ${dbOk ? '' : 'cycle'}">DB: ${dbOk ? 'ok' : 'xəta'}</span>
+        </div>
+        <div class="obs">
+          · Son dövrə: ${h.last_tick_age_s != null ? Math.floor(h.last_tick_age_s) + ' san əvvəl' : '—'}<br>
+          · Aktiv beyin: ${h.active_brain} (${(h.available_brains || []).length} əlçatan)<br>
+          · Disk: ${h.disk?.percent || '?'}% (${h.disk?.free_gb?.toFixed(1) || '?'} GB boş)<br>
+          · RAM: ${h.memory?.percent || '?'}% (${h.memory?.used_gb?.toFixed(1) || '?'}/${h.memory?.total_gb?.toFixed(1) || '?'} GB)<br>
+          · DB ölçüsü: ${h.database?.size_mb || '?'} MB (${h.database?.thoughts || 0} düşüncə)
+        </div>
+      </div>
+    `;
+  } catch (e) { console.error('health xətası', e); }
+}
+
+async function loadTasks() {
+  try {
+    const tasks = await api('/api/tasks?status=open');
+    const list = document.getElementById('tasks-list');
+    document.getElementById('tasks-badge').textContent = tasks.length + ' tapşırıq';
+    document.getElementById('stat-open-tasks').textContent = tasks.length;
+    if (tasks.length === 0) {
+      list.innerHTML = '<div class="empty">heç bir açıq tapşırıq yoxdur</div>';
+      return;
+    }
+    list.innerHTML = tasks.map(t => `
+      <div class="item task">
+        <div class="ts">${escapeHtml(t.ts)} · #${t.id}</div>
+        <div class="focus"><span class="priority">[P${t.priority}]</span> ${escapeHtml(t.title)}</div>
+        ${t.notes ? `<div class="obs">${escapeHtml(t.notes)}</div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { console.error('tasks xətası', e); }
+}
+
+async function loadThoughts() {
+  try {
+    const thoughts = await api('/api/thoughts?limit=20');
+    const list = document.getElementById('thoughts-list');
+    document.getElementById('thoughts-badge').textContent = thoughts.length + ' düşüncə';
+    if (thoughts.length === 0) {
+      list.innerHTML = '<div class="empty">heç bir düşüncə yoxdur</div>';
+      return;
+    }
+    list.innerHTML = thoughts.map(t => `
+      <div class="item">
+        <div class="ts">
+          ${escapeHtml(t.ts)} · Dövrə #${t.cycle}
+          <span class="indicator">${escapeHtml(t.brain)}</span>
+          ${t.action_type ? `<span class="indicator action">${escapeHtml(t.action_type)}</span>` : ''}
+          ${t.confidence ? `<span class="indicator cycle">${t.confidence}%</span>` : ''}
+        </div>
+        ${t.focus_question ? `<div class="focus">◆ ${escapeHtml(t.focus_question)}</div>` : ''}
+        ${t.current_observation ? `<div class="obs">${escapeHtml(t.current_observation)}</div>` : ''}
+        ${t.new_tasks ? `<div class="meta-line">+${t.new_tasks} yeni tapşırıq · ${t.tokens_in}→${t.tokens_out} token</div>` : ''}
+        ${t.thinking_preview ? `<div class="thinking">💭 ${escapeHtml(t.thinking_preview)}…</div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { console.error('thoughts xətası', e); }
+}
+
+async function loadResearch() {
+  try {
+    const items = await api('/api/research?limit=20');
+    const list = document.getElementById('research-list');
+    document.getElementById('research-badge').textContent = items.length + ' araşdırma';
+    if (items.length === 0) {
+      list.innerHTML = '<div class="empty">heç bir araşdırma yoxdur</div>';
+      return;
+    }
+    list.innerHTML = items.map(i => `
+      <div class="item research">
+        <div class="ts">${escapeHtml(i.ts)} · Dövrə #${i.cycle}</div>
+        <div class="focus">⌕ ${escapeHtml(i.query)}</div>
+        <div class="meta-line">Mənbə: ${escapeHtml(i.source)} · ${i.result_count} nəticə</div>
+        ${i.summary ? `<div class="obs">${escapeHtml(i.summary)}</div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { console.error('research xətası', e); }
+}
+
+async function loadNotes() {
+  try {
+    const notes = await api('/api/notes?limit=20');
+    const list = document.getElementById('notes-list');
+    document.getElementById('notes-badge').textContent = notes.length + ' qeyd';
+    if (notes.length === 0) {
+      list.innerHTML = '<div class="empty">heç bir qeyd yoxdur</div>';
+      return;
+    }
+    list.innerHTML = notes.map(n => `
+      <div class="item note" onclick="openNote(${n.id})">
+        <div class="ts">${escapeHtml(n.ts)} · Dövrə #${n.cycle}</div>
+        <div class="title">📝 ${escapeHtml(n.title)}</div>
+        <div class="meta-line">${escapeHtml(n.path)} ${n.tags ? '· '+escapeHtml(n.tags) : ''}</div>
+      </div>
+    `).join('');
+  } catch (e) { console.error('notes xətası', e); }
+}
+
+async function openNote(id) {
+  try {
+    const d = await api('/api/notes/' + id);
+    document.getElementById('modal-title').textContent = d.title || 'Qeyd #' + id;
+    document.getElementById('modal-content').textContent = d.content || '';
+    document.getElementById('modal-bg').classList.add('active');
+  } catch (e) { console.error('note xətası', e); }
+}
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('active');
+}
+document.getElementById('modal-bg').addEventListener('click', e => {
+  if (e.target.id === 'modal-bg') closeModal();
+});
+
+async function loadAll() {
+  await Promise.all([loadStats(), loadHealth(), loadThoughts(), loadTasks(), loadResearch(), loadNotes()]);
+  document.getElementById('brain-name').textContent = 'groq';
+  const now = new Date().toLocaleTimeString('az-AZ');
+  document.getElementById('last-update').textContent = now;
+}
+
+loadAll();
+setInterval(loadAll, REFRESH_MS);
+</script>
+</body>
+</html>
